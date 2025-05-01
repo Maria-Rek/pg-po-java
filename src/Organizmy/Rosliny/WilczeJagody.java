@@ -1,0 +1,19 @@
+public class WilczeJagody extends Roslina {
+    public WilczeJagody(Punkt polozenie) {
+        super(polozenie, 99, "☠️");
+    }
+
+    @Override
+    public String nazwa() {
+        return "Wilcze Jagody";
+    }
+
+    @Override
+    public void kolizja(Organizm inny) {
+        if (inny != null) {
+            SwiatGlobalny.dodajLog(inny.nazwa() + " zjadł " + nazwa() + " i zginął!");
+            SwiatGlobalny.usunOrganizm(inny);
+            SwiatGlobalny.usunOrganizm(this);
+        }
+    }
+}
