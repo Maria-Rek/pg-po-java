@@ -1,3 +1,10 @@
+package Organizmy.Rosliny;
+
+import Organizmy.Organizm;
+import Organizmy.Roslina;
+import Utils.Punkt;
+import Swiat.SwiatGlobalny;
+
 public class WilczeJagody extends Roslina {
     public WilczeJagody(Punkt polozenie) {
         super(polozenie, 99, "☠️");

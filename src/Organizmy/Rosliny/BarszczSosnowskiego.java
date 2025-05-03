@@ -1,3 +1,10 @@
+package Organizmy.Rosliny;
+
+import Organizmy.Organizm;
+import Organizmy.Roslina;
+import Utils.Punkt;
+import Swiat.SwiatGlobalny;
+
 import java.util.List;
 
 public class BarszczSosnowskiego extends Roslina {
@@ -22,7 +29,7 @@ public class BarszczSosnowskiego extends Roslina {
             }
         }
 
-        super.akcja(); // standardowa próba rozsiewu
+        super.akcja();
     }
 
     @Override

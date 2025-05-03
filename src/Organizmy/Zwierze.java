@@ -1,3 +1,8 @@
+package Organizmy;
+
+import Swiat.SwiatGlobalny;
+import Utils.Punkt;
+
 import java.util.List;
 import java.util.Random;
 
@@ -8,7 +13,7 @@ public abstract class Zwierze extends Organizm {
 
     @Override
     public void akcja() {
-        List<Punkt> sasiednie = SwiatGlobalny.getSasiedniePola(polozenie); // tymczasowo
+        List<Punkt> sasiednie = SwiatGlobalny.getSasiedniePola(polozenie);
         if (!sasiednie.isEmpty()) {
             Punkt nowaPozycja = sasiednie.get(new Random().nextInt(sasiednie.size()));
             Organizm cel = SwiatGlobalny.getOrganizmNa(nowaPozycja);
@@ -19,7 +24,6 @@ public abstract class Zwierze extends Organizm {
                 setPolozenie(nowaPozycja);
             }
         }
-
         zwiekszWiek();
     }
 

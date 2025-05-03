@@ -1,3 +1,8 @@
+package Organizmy.Zwierzeta;
+import Organizmy.Zwierze;
+import Utils.Punkt;
+
+
 public class Wilk extends Zwierze {
     public Wilk(Punkt polozenie) {
         super(polozenie, 9, 5, "🐺");

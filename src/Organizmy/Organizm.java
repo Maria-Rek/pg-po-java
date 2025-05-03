@@ -1,3 +1,7 @@
+package Organizmy;
+
+import Utils.Punkt;
+
 public abstract class Organizm {
     protected int sila;
     protected int inicjatywa;

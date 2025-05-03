@@ -1,3 +1,11 @@
+package Organizmy.Zwierzeta;
+
+import Organizmy.Zwierze;
+import Organizmy.Organizm;
+import Utils.Punkt;
+import Utils.Kierunek;
+import Swiat.SwiatGlobalny;
+
 import java.util.List;
 
 public class Czlowiek extends Zwierze {
@@ -51,10 +59,15 @@ public class Czlowiek extends Zwierze {
 
         if (zaplanowanyRuch != Kierunek.BRAK) {
             Punkt cel = zaplanowanyRuch.krok(getPolozenie());
-            if (SwiatGlobalny.isWPlanszy(cel)) {
+
+            // Sprawdź ręcznie czy w planszy
+            if (cel.getX() >= 0 && cel.getX() < SwiatGlobalny.pobierzSwiat().getSzerokosc()
+                    && cel.getY() >= 0 && cel.getY() < SwiatGlobalny.pobierzSwiat().getWysokosc()) {
+
                 Organizm o = SwiatGlobalny.getOrganizmNa(cel);
                 if (o != null) kolizja(o);
                 else setPolozenie(cel);
+
             } else {
                 SwiatGlobalny.dodajLog("Człowiek chciał wyjść poza mapę!");
             }

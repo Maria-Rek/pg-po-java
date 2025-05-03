@@ -1,3 +1,9 @@
+package Organizmy.Rosliny;
+
+import Organizmy.Roslina;
+import Utils.Punkt;
+import Swiat.SwiatGlobalny;
+
 import java.util.List;
 import java.util.Random;
 
@@ -18,7 +24,7 @@ public class Mlecz extends Roslina {
                 List<Punkt> wolne = SwiatGlobalny.getWolnePolaObok(getPolozenie());
                 if (!wolne.isEmpty()) {
                     Punkt nowaPozycja = wolne.get(new Random().nextInt(wolne.size()));
-                    SwiatGlobalny.stworzOrganizm(this.getClass(), nowaPozycja);
+                    SwiatGlobalny.stworzOrganizm(Mlecz.class, nowaPozycja);
                     SwiatGlobalny.dodajLog(nazwa() + " rozsiało się");
                 }
             }

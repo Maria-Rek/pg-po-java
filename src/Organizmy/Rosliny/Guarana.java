@@ -1,3 +1,10 @@
+package Organizmy.Rosliny;
+
+import Organizmy.Roslina;
+import Organizmy.Organizm;
+import Utils.Punkt;
+import Swiat.SwiatGlobalny;
+
 public class Guarana extends Roslina {
     public Guarana(Punkt polozenie) {
         super(polozenie, 0, "🍒");

@@ -1,3 +1,10 @@
+package Organizmy.Zwierzeta;
+
+import Organizmy.Organizm;
+import Organizmy.Zwierze;
+import Utils.Punkt;
+import Swiat.SwiatGlobalny;
+
 import java.util.List;
 import java.util.Random;
 
@@ -13,7 +20,7 @@ public class Zolw extends Zwierze {
 
     @Override
     public void akcja() {
-        if (new Random().nextInt(4) == 0) { // 25% szansy
+        if (new Random().nextInt(4) == 0) { // 25% szansy na ruch
             super.akcja();
         } else {
             SwiatGlobalny.dodajLog(nazwa() + " nie poruszył się (25% szansy na ruch)");

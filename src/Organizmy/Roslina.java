@@ -1,14 +1,19 @@
+package Organizmy;
+
+import Swiat.SwiatGlobalny;
+import Utils.Punkt;
+
 import java.util.List;
 import java.util.Random;
 
 public abstract class Roslina extends Organizm {
     public Roslina(Punkt polozenie, int sila, String ikona) {
-        super(polozenie, sila, 0, ikona); // inicjatywa = 0
+        super(polozenie, sila, 0, ikona);
     }
 
     @Override
     public void akcja() {
-        if (new Random().nextInt(10) == 0) { // 10% szans
+        if (new Random().nextInt(10) == 0) {
             List<Punkt> wolne = SwiatGlobalny.getWolnePolaObok(polozenie);
             if (!wolne.isEmpty()) {
                 Punkt nowaPozycja = wolne.get(new Random().nextInt(wolne.size()));
@@ -16,7 +21,6 @@ public abstract class Roslina extends Organizm {
                 SwiatGlobalny.dodajLog(nazwa() + " rozsiało się");
             }
         }
-
         zwiekszWiek();
     }
 

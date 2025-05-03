@@ -1,3 +1,10 @@
+package Organizmy.Zwierzeta;
+
+import Organizmy.Zwierze;
+import Organizmy.Organizm;
+import Swiat.SwiatGlobalny;
+import Utils.Punkt;
+
 import java.util.List;
 import java.util.Random;
 
@@ -13,7 +20,7 @@ public class Lis extends Zwierze {
 
     @Override
     public void akcja() {
-        List<Punkt> sasiednie = SwiatGlobalny.getSasiedniePola(polozenie);
+        List<Punkt> sasiednie = SwiatGlobalny.getSasiedniePola(getPolozenie());
         List<Punkt> bezpieczne = sasiednie.stream()
                 .filter(p -> {
                     Organizm o = SwiatGlobalny.getOrganizmNa(p);
