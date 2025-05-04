@@ -5,13 +5,15 @@ import Organizmy.Organizm;
 import Utils.Punkt;
 import Swiat.SwiatGlobalny;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class Antylopa extends Zwierze {
     public Antylopa(Punkt polozenie) {
-        super(polozenie, 4, 4, "🦌");
+        super(polozenie, 4, 4);
     }
 
     @Override
@@ -29,7 +31,6 @@ public class Antylopa extends Zwierze {
             int dy = p.getY() - getPolozenie().getY();
             Punkt dalej = new Punkt(p.getX() + dx, p.getY() + dy);
 
-            // Jeśli nie masz isWPlanszy(), zamień na to:
             if (dalej.getX() >= 0 && dalej.getX() < SwiatGlobalny.pobierzSwiat().getSzerokosc() &&
                     dalej.getY() >= 0 && dalej.getY() < SwiatGlobalny.pobierzSwiat().getWysokosc()) {
                 dalsze.add(dalej);
@@ -65,5 +66,10 @@ public class Antylopa extends Zwierze {
         }
 
         super.kolizja(inny);
+    }
+
+    @Override
+    public Image getObrazek() {
+        return new ImageIcon(getClass().getResource("/Resources/antylopa.png")).getImage();
     }
 }

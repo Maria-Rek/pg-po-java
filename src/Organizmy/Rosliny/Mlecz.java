@@ -1,15 +1,18 @@
 package Organizmy.Rosliny;
 
+import Organizmy.Organizm;
 import Organizmy.Roslina;
 import Utils.Punkt;
 import Swiat.SwiatGlobalny;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 import java.util.Random;
 
 public class Mlecz extends Roslina {
     public Mlecz(Punkt polozenie) {
-        super(polozenie, 0, "🌼");
+        super(polozenie, 0);
     }
 
     @Override
@@ -30,5 +33,22 @@ public class Mlecz extends Roslina {
             }
         }
         zwiekszWiek();
+    }
+
+    @Override
+    public void kolizja(Organizm inny) {
+        if (inny == null) return;
+
+        if ("Owca".equals(inny.nazwa())) {
+            SwiatGlobalny.dodajLog(nazwa() + " został zjedzony przez " + inny.nazwa());
+            SwiatGlobalny.usunOrganizm(this);
+        } else {
+            SwiatGlobalny.dodajLog(inny.nazwa() + " wszedł na " + nazwa() + ", ale jej nie zjadł.");
+        }
+    }
+
+    @Override
+    public Image getObrazek() {
+        return new ImageIcon(getClass().getResource("/Resources/mlecz.png")).getImage();
     }
 }

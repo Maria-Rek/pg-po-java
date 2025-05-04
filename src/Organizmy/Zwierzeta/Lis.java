@@ -5,12 +5,15 @@ import Organizmy.Organizm;
 import Swiat.SwiatGlobalny;
 import Utils.Punkt;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Lis extends Zwierze {
     public Lis(Punkt polozenie) {
-        super(polozenie, 3, 7, "🦊");
+        super(polozenie, 3, 7);
     }
 
     @Override
@@ -21,12 +24,14 @@ public class Lis extends Zwierze {
     @Override
     public void akcja() {
         List<Punkt> sasiednie = SwiatGlobalny.getSasiedniePola(getPolozenie());
-        List<Punkt> bezpieczne = sasiednie.stream()
-                .filter(p -> {
-                    Organizm o = SwiatGlobalny.getOrganizmNa(p);
-                    return o == null || o.getSila() <= this.getSila();
-                })
-                .toList();
+        List<Punkt> bezpieczne = new ArrayList<>();
+
+        for (Punkt p : sasiednie) {
+            Organizm o = SwiatGlobalny.getOrganizmNa(p);
+            if (o == null || o.getSila() <= this.getSila()) {
+                bezpieczne.add(p);
+            }
+        }
 
         if (!bezpieczne.isEmpty()) {
             Punkt nowaPozycja = bezpieczne.get(new Random().nextInt(bezpieczne.size()));
@@ -42,5 +47,10 @@ public class Lis extends Zwierze {
         }
 
         zwiekszWiek();
+    }
+
+    @Override
+    public Image getObrazek() {
+        return new ImageIcon(getClass().getResource("/Resources/lis.png")).getImage();
     }
 }

@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Random;
 
 public abstract class Roslina extends Organizm {
-    public Roslina(Punkt polozenie, int sila, String ikona) {
-        super(polozenie, sila, 0, ikona);
+    public Roslina(Punkt polozenie, int sila) {
+        super(polozenie, sila, 0); // Rośliny mają inicjatywę 0
     }
 
     @Override
@@ -28,6 +28,24 @@ public abstract class Roslina extends Organizm {
     public void kolizja(Organizm inny) {
         if (inny == null) return;
 
+        // Trawa: zjadana tylko przez Owcę
+        if (this.getClass().getSimpleName().equals("Trawa")) {
+            if (inny.getClass().getSimpleName().equals("Owca")) {
+                SwiatGlobalny.dodajLog("Trawa została zjedzona przez Owcę (bez efektu)");
+                SwiatGlobalny.usunOrganizm(this);
+            } else {
+                SwiatGlobalny.dodajLog(inny.nazwa() + " stanęło na Trawie – brak reakcji");
+            }
+            return;
+        }
+
+        // Mlecz – nie jest zjadany przez nikogo
+        if (this.getClass().getSimpleName().equals("Mlecz")) {
+            SwiatGlobalny.dodajLog(inny.nazwa() + " stanęło na Mleczu – brak reakcji");
+            return;
+        }
+
+        // Inne rośliny mogą być zjadane
         SwiatGlobalny.dodajLog(nazwa() + " zostało zjedzone przez " + inny.nazwa());
         SwiatGlobalny.usunOrganizm(this);
     }

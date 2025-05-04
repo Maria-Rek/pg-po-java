@@ -6,6 +6,8 @@ import Utils.Punkt;
 import Utils.Kierunek;
 import Swiat.SwiatGlobalny;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
 public class Czlowiek extends Zwierze {
@@ -15,7 +17,7 @@ public class Czlowiek extends Zwierze {
     private Kierunek zaplanowanyRuch = Kierunek.BRAK;
 
     public Czlowiek(Punkt polozenie) {
-        super(polozenie, 5, 4, "🚹");
+        super(polozenie, 5, 4);
     }
 
     @Override
@@ -60,7 +62,6 @@ public class Czlowiek extends Zwierze {
         if (zaplanowanyRuch != Kierunek.BRAK) {
             Punkt cel = zaplanowanyRuch.krok(getPolozenie());
 
-            // Sprawdź ręcznie czy w planszy
             if (cel.getX() >= 0 && cel.getX() < SwiatGlobalny.pobierzSwiat().getSzerokosc()
                     && cel.getY() >= 0 && cel.getY() < SwiatGlobalny.pobierzSwiat().getWysokosc()) {
 
@@ -77,6 +78,19 @@ public class Czlowiek extends Zwierze {
         zwiekszWiek();
     }
 
+    @Override
+    public void kolizja(Organizm inny) {
+        if (inny == null) return;
+
+        if (inny.nazwa().equals("BarszczSosnowskiego")) {
+            SwiatGlobalny.dodajLog("Człowiek zginął po kontakcie z Barszczem Sosnowskiego.");
+            SwiatGlobalny.usunOrganizm(this);
+            return;
+        }
+
+        super.kolizja(inny);
+    }
+
     public int getCooldown() {
         return turyCooldown;
     }
@@ -87,5 +101,20 @@ public class Czlowiek extends Zwierze {
 
     public boolean isSpecjalnaAktywna() {
         return specjalnaAktywna;
+    }
+
+    public String getStatusTekst() {
+        if (specjalnaAktywna) {
+            return "Aktywna (" + turyAktywne + "/5) 🔥";
+        } else if (turyCooldown > 0) {
+            return "Cooldown (" + turyCooldown + "/5)";
+        } else {
+            return "Gotowa 💪";
+        }
+    }
+
+    @Override
+    public Image getObrazek() {
+        return new ImageIcon(getClass().getResource("/Resources/czlowiek.png")).getImage();
     }
 }

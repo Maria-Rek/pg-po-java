@@ -5,22 +5,36 @@ import Organizmy.Roslina;
 import Utils.Punkt;
 import Swiat.SwiatGlobalny;
 
+import javax.swing.*;
+import java.awt.*;
+
 public class WilczeJagody extends Roslina {
     public WilczeJagody(Punkt polozenie) {
-        super(polozenie, 99, "☠️");
+        super(polozenie, 99); // siła nieistotna, ale może być wysoka
     }
 
     @Override
     public String nazwa() {
-        return "Wilcze Jagody";
+        return "WilczeJagody";
     }
 
     @Override
     public void kolizja(Organizm inny) {
-        if (inny != null) {
-            SwiatGlobalny.dodajLog(inny.nazwa() + " zjadł " + nazwa() + " i zginął!");
-            SwiatGlobalny.usunOrganizm(inny);
-            SwiatGlobalny.usunOrganizm(this);
+        if (inny == null) return;
+
+        if (this.getClass().equals(inny.getClass())) {
+            // Rozmnażanie jak zwykle między tą samą klasą
+            super.kolizja(inny);
+            return;
         }
+
+        SwiatGlobalny.dodajLog(inny.nazwa() + " zjadł " + nazwa() + " i zginął!");
+        SwiatGlobalny.usunOrganizm(inny);
+        SwiatGlobalny.usunOrganizm(this);
+    }
+
+    @Override
+    public Image getObrazek() {
+        return new ImageIcon(getClass().getResource("/Resources/jagody.png")).getImage();
     }
 }

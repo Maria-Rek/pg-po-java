@@ -2,11 +2,17 @@ package Swiat;
 
 import Utils.Punkt;
 import Organizmy.Organizm;
-import java.util.*;
+
+import javax.swing.*;
+import javax.swing.text.*;
+import java.awt.Color;
 import java.lang.reflect.Constructor;
+import java.util.List;
+import java.util.ArrayList;
 
 public class SwiatGlobalny {
     private static ISwiat instancja;
+    private static JTextPane poleLogow;
 
     public static void ustawSwiat(ISwiat swiat) {
         instancja = swiat;
@@ -32,8 +38,39 @@ public class SwiatGlobalny {
         instancja.dodajOrganizm(o);
     }
 
+    public static void setPoleLogow(JTextPane pole) {
+        poleLogow = pole;
+    }
+
     public static void dodajLog(String tekst) {
-        instancja.dodajLog(tekst);
+        if (poleLogow != null) {
+            StyledDocument doc = poleLogow.getStyledDocument();
+            SimpleAttributeSet styl = new SimpleAttributeSet();
+            String lower = tekst.toLowerCase();
+
+            Color kolor = new Color(199, 21, 133); // ciemny róż
+
+            if (lower.contains("zgin") || lower.contains("zabity") || lower.contains("spalony") || lower.contains("atak")) {
+                kolor = Color.RED;
+            } else if (lower.contains("zamroż") || lower.contains("zamroz")) {
+                kolor = new Color(0, 0, 139); // ciemnoniebieski
+            } else if (lower.contains("rozsia")) {
+                kolor = Color.GREEN.darker();
+            } else if (lower.contains("rozmnoży") || lower.contains("rozmnoz")) {
+                kolor = Color.ORANGE;
+            }
+
+            StyleConstants.setForeground(styl, kolor);
+
+            try {
+                doc.insertString(doc.getLength(), tekst + "\n", styl);
+                poleLogow.setCaretPosition(doc.getLength());
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println(tekst); // debugowy fallback
     }
 
     public static void stworzOrganizm(Class<? extends Organizm> typ, Punkt p) {
@@ -73,5 +110,24 @@ public class SwiatGlobalny {
             }
         }
         return wolne;
+    }
+
+    // 🆕 Mapowanie nazw organizmów z pliku na klasy
+    public static Class<? extends Organizm> klasaDlaNazwy(String nazwa) {
+        return switch (nazwa) {
+            case "Trawa" -> Organizmy.Rosliny.Trawa.class;
+            case "Mlecz" -> Organizmy.Rosliny.Mlecz.class;
+            case "Guarana" -> Organizmy.Rosliny.Guarana.class;
+            case "WilczeJagody" -> Organizmy.Rosliny.WilczeJagody.class;
+            case "BarszczSosnowskiego" -> Organizmy.Rosliny.BarszczSosnowskiego.class;
+            case "Owca" -> Organizmy.Zwierzeta.Owca.class;
+            case "Wilk" -> Organizmy.Zwierzeta.Wilk.class;
+            case "Lis" -> Organizmy.Zwierzeta.Lis.class;
+            case "Zolw" -> Organizmy.Zwierzeta.Zolw.class;
+            case "Antylopa" -> Organizmy.Zwierzeta.Antylopa.class;
+            case "CyberOwca" -> Organizmy.Zwierzeta.CyberOwca.class;
+            case "Czlowiek" -> Organizmy.Zwierzeta.Czlowiek.class;
+            default -> null;
+        };
     }
 }

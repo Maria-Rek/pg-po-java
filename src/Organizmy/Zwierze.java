@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Random;
 
 public abstract class Zwierze extends Organizm {
-    public Zwierze(Punkt polozenie, int sila, int inicjatywa, String ikona) {
-        super(polozenie, sila, inicjatywa, ikona);
+    public Zwierze(Punkt polozenie, int sila, int inicjatywa) {
+        super(polozenie, sila, inicjatywa);
     }
 
     @Override
@@ -31,6 +31,26 @@ public abstract class Zwierze extends Organizm {
     public void kolizja(Organizm inny) {
         if (inny == null) return;
 
+        // 🌿 Specjalne traktowanie Trawy
+        if (inny.nazwa().equals("Trawa")) {
+            if (this.nazwa().equals("Owca")) {
+                SwiatGlobalny.dodajLog(nazwa() + " zjadła Trawę");
+                SwiatGlobalny.usunOrganizm(inny);
+            } else {
+                SwiatGlobalny.dodajLog(nazwa() + " wszedł na Trawę, ale jej nie zjadł");
+            }
+            this.setPolozenie(inny.getPolozenie());
+            return;
+        }
+
+        // 🌼 Specjalne traktowanie Mlecza
+        if (inny.nazwa().equals("Mlecz")) {
+            SwiatGlobalny.dodajLog(nazwa() + " wszedł na Mlecz, ale go nie zjadł");
+            this.setPolozenie(inny.getPolozenie());
+            return;
+        }
+
+        // 🐾 Rozmnażanie
         if (this.getClass().equals(inny.getClass())) {
             List<Punkt> wolne = SwiatGlobalny.getWolnePolaObok(polozenie);
             if (!wolne.isEmpty()) {
@@ -41,6 +61,7 @@ public abstract class Zwierze extends Organizm {
             return;
         }
 
+        // 🛡️ Odbicie ataku
         if (inny.czyOdbilAtak(this)) {
             SwiatGlobalny.dodajLog(inny.nazwa() + " odbił atak " + this.nazwa());
             return;
@@ -49,7 +70,7 @@ public abstract class Zwierze extends Organizm {
         if (this.sila >= inny.getSila()) {
             SwiatGlobalny.dodajLog(inny.nazwa() + " został zabity przez " + this.nazwa());
             SwiatGlobalny.usunOrganizm(inny);
-            setPolozenie(inny.getPolozenie());
+            this.setPolozenie(inny.getPolozenie());
         } else {
             SwiatGlobalny.dodajLog(this.nazwa() + " został zabity przez " + inny.nazwa());
             SwiatGlobalny.usunOrganizm(this);

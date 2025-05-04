@@ -1,25 +1,25 @@
 package Organizmy;
 
 import Utils.Punkt;
+import java.awt.Image;
 
 public abstract class Organizm {
     protected int sila;
     protected int inicjatywa;
     protected int wiek;
     protected Punkt polozenie;
-    protected String ikona;
 
-    public Organizm(Punkt polozenie, int sila, int inicjatywa, String ikona) {
+    public Organizm(Punkt polozenie, int sila, int inicjatywa) {
         this.polozenie = polozenie;
         this.sila = sila;
         this.inicjatywa = inicjatywa;
         this.wiek = 0;
-        this.ikona = ikona;
     }
 
     public abstract void akcja();
     public abstract void kolizja(Organizm inny);
     public abstract String nazwa();
+    public abstract Image getObrazek();
 
     public int getSila() {
         return sila;
@@ -37,6 +37,10 @@ public abstract class Organizm {
         return wiek;
     }
 
+    public void setWiek(int wiek) {  // ⬅️ 🔧 DODANE
+        this.wiek = wiek;
+    }
+
     public void zwiekszWiek() {
         this.wiek++;
     }
@@ -49,11 +53,19 @@ public abstract class Organizm {
         this.polozenie = polozenie;
     }
 
-    public String getIkona() {
-        return ikona;
+    public boolean czyOdbilAtak(Organizm atakujacy) {
+        return false; // Domyślnie nikt nie odbija
     }
 
-    public boolean czyOdbilAtak(Organizm atakujacy) {
-        return false;
+    public boolean czyZwierze() {
+        return this instanceof Zwierze;
+    }
+
+    public boolean czyRoslina() {
+        return this instanceof Roslina;
+    }
+
+    public boolean tenSamGatunek(Organizm inny) {
+        return this.getClass().equals(inny.getClass());
     }
 }
