@@ -48,16 +48,16 @@ public class SwiatGlobalny {
             SimpleAttributeSet styl = new SimpleAttributeSet();
             String lower = tekst.toLowerCase();
 
-            Color kolor = new Color(199, 21, 133); // ciemny róż
+            Color kolor = new Color(218, 73, 165);
 
-            if (lower.contains("zgin") || lower.contains("zabity") || lower.contains("spalony") || lower.contains("atak")) {
+            if (lower.contains("zgin") || lower.contains("zabity") || lower.contains("atak")) {
                 kolor = Color.RED;
-            } else if (lower.contains("zamroż") || lower.contains("zamroz")) {
-                kolor = new Color(0, 0, 139); // ciemnoniebieski
-            } else if (lower.contains("rozsia")) {
+            }else if (lower.contains("rozsia")) {
                 kolor = Color.GREEN.darker();
             } else if (lower.contains("rozmnoży") || lower.contains("rozmnoz")) {
-                kolor = Color.ORANGE;
+                kolor = Color.CYAN.darker();
+            }else if (lower.contains("całopalenie") || lower.contains("spalony")){
+                kolor = Color.ORANGE.darker();
             }
 
             StyleConstants.setForeground(styl, kolor);
@@ -70,7 +70,7 @@ public class SwiatGlobalny {
             }
         }
 
-        System.out.println(tekst); // debugowy fallback
+        System.out.println(tekst);
     }
 
     public static void stworzOrganizm(Class<? extends Organizm> typ, Punkt p) {
@@ -112,7 +112,6 @@ public class SwiatGlobalny {
         return wolne;
     }
 
-    // 🆕 Mapowanie nazw organizmów z pliku na klasy
     public static Class<? extends Organizm> klasaDlaNazwy(String nazwa) {
         return switch (nazwa) {
             case "Trawa" -> Organizmy.Rosliny.Trawa.class;

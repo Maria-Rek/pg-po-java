@@ -31,7 +31,6 @@ public class Widok extends JPanel {
         setFocusable(true);
         requestFocusInWindow();
 
-        // Menu dodawania organizmów
         menuDodawania = new JPopupMenu();
         dodajOpcje("Trawa", Organizmy.Rosliny.Trawa.class);
         dodajOpcje("Mlecz", Organizmy.Rosliny.Mlecz.class);

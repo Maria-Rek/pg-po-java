@@ -2,9 +2,16 @@ package GUI;
 
 import Swiat.SwiatKwadratowy;
 import Swiat.SwiatGlobalny;
+import Organizmy.Organizm;
+import Organizmy.Zwierzeta.Czlowiek;
+import Utils.Kierunek;
+import Utils.Punkt;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import java.util.List;
 
 public class Gra extends JFrame {
     private Widok widok;
@@ -14,26 +21,26 @@ public class Gra extends JFrame {
     private final JTextPane poleLogow;
 
     public Gra() {
-        setTitle("Wirtualny Świat");
+        setTitle("Maria Rek 203174");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        getContentPane().setBackground(new Color(227, 152, 214)); // jasnoróżowe tło
         setLayout(new BorderLayout());
 
         int szerokosc = 10;
         int wysokosc = 10;
         int tury = 10;
 
-        // 🔄 POLSKIE PRZYCISKI: Tak / Nie
-        Object[] options = {"Tak", "Nie"};
+        Object[] options = {"Wczytaj grę", "Nowa gra"};
         int opcja = JOptionPane.showOptionDialog(null,
-                "Czy chcesz wczytać zapisaną grę?",
-                "Wczytaj grę",
+                "Co chcesz zrobić?",
+                "Wczytywanie gry",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 options,
                 options[0]);
 
-        if (opcja == JOptionPane.YES_OPTION) {
+        if (opcja == 0) {
             String nazwa = JOptionPane.showInputDialog(null, "Podaj nazwę pliku do wczytania:", "save");
             swiat = SwiatKwadratowy.wczytajZPliku(nazwa);
             if (swiat == null) {
@@ -48,6 +55,7 @@ public class Gra extends JFrame {
                 JTextField turField = new JTextField("10");
 
                 JPanel panel = new JPanel(new GridLayout(3, 2));
+                panel.setBackground(new Color(227, 152, 214));
                 panel.add(new JLabel("Szerokość:"));
                 panel.add(szerField);
                 panel.add(new JLabel("Wysokość:"));
@@ -82,13 +90,11 @@ public class Gra extends JFrame {
         this.maksTury = swiat.getMaksTury();
         SwiatGlobalny.ustawSwiat(swiat);
 
-        // 🔵 Pasek informacyjny
         infoLabel = new JLabel("Witaj w grze Wirtualny Świat!");
         infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
         infoLabel.setFont(new Font("Arial", Font.BOLD, 14));
         add(infoLabel, BorderLayout.NORTH);
 
-        // 🟣 Pole logów
         poleLogow = new JTextPane();
         poleLogow.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(poleLogow);
@@ -97,26 +103,70 @@ public class Gra extends JFrame {
 
         SwiatGlobalny.setPoleLogow(poleLogow);
 
-        // 🟢 Widok świata
         widok = new Widok(swiat, maksTury, infoLabel);
         add(widok, BorderLayout.CENTER);
 
-        // 🔘 Panel przycisków
         JPanel przyciski = new JPanel();
+        przyciski.setBackground(new Color(227, 152, 214));
         JButton turaBtn = new JButton("Następna tura");
         JButton zapiszBtn = new JButton("Zapisz grę");
         JButton wczytajBtn = new JButton("Wczytaj grę");
+        JButton nowaGraBtn = new JButton("Nowa gra");
+
+        Color kolorPrzyciskow = new Color(227, 127, 210);
+        for (JButton btn : new JButton[]{turaBtn, zapiszBtn, wczytajBtn, nowaGraBtn}) {
+            btn.setBackground(kolorPrzyciskow);
+            btn.setOpaque(true);
+            btn.setBorderPainted(false);
+        }
 
         przyciski.add(turaBtn);
         przyciski.add(zapiszBtn);
         przyciski.add(wczytajBtn);
+        przyciski.add(nowaGraBtn);
 
         turaBtn.addActionListener(e -> {
             widok.wykonajTure();
 
             if (swiat.getNumerTury() >= maksTury) {
-                JOptionPane.showMessageDialog(this, "Gra zakończona po " + maksTury + " turach.");
-                System.exit(0);
+                Object[] opcje = {"Zakończ", "Nowa gra", "Wczytaj grę"};
+                int wybor = JOptionPane.showOptionDialog(this,
+                        "Gra zakończona po " + maksTury + " turach.\nCo chcesz teraz zrobić?",
+                        "Koniec gry",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        opcje,
+                        opcje[0]);
+
+                switch (wybor) {
+                    case 0 -> System.exit(0);
+                    case 1 -> {
+                        dispose();
+                        new Gra();
+                    }
+                    case 2 -> {
+                        String nazwa = JOptionPane.showInputDialog(this, "Podaj nazwę pliku do wczytania:", "save");
+                        if (nazwa != null && !nazwa.trim().isEmpty()) {
+                            SwiatKwadratowy nowy = SwiatKwadratowy.wczytajZPliku(nazwa.trim());
+                            if (nowy != null) {
+                                remove(widok);
+                                swiat = nowy;
+                                maksTury = nowy.getMaksTury();
+                                SwiatGlobalny.ustawSwiat(nowy);
+                                widok = new Widok(swiat, maksTury, infoLabel);
+                                add(widok, BorderLayout.CENTER);
+                                revalidate();
+                                repaint();
+                                SwiatGlobalny.dodajLog("Wczytano nową grę z pliku.");
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Nie udało się wczytać pliku.");
+                            }
+                            widok.requestFocusInWindow();
+                        }
+                    }
+                }
+                return;
             }
 
             widok.requestFocusInWindow();
@@ -149,6 +199,11 @@ public class Gra extends JFrame {
                 }
                 widok.requestFocusInWindow();
             }
+        });
+
+        nowaGraBtn.addActionListener(e -> {
+            dispose();
+            new Gra();
         });
 
         add(przyciski, BorderLayout.EAST);
