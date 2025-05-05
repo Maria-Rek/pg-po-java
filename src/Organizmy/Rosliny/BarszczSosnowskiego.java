@@ -32,7 +32,7 @@ public class BarszczSosnowskiego extends Roslina {
             }
         }
 
-        super.akcja(); // może się rozsiać
+        super.akcja();
     }
 
     @Override

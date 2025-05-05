@@ -37,7 +37,7 @@ public abstract class Organizm {
         return wiek;
     }
 
-    public void setWiek(int wiek) {  // ⬅️ 🔧 DODANE
+    public void setWiek(int wiek) {
         this.wiek = wiek;
     }
 
@@ -54,15 +54,7 @@ public abstract class Organizm {
     }
 
     public boolean czyOdbilAtak(Organizm atakujacy) {
-        return false; // Domyślnie nikt nie odbija
-    }
-
-    public boolean czyZwierze() {
-        return this instanceof Zwierze;
-    }
-
-    public boolean czyRoslina() {
-        return this instanceof Roslina;
+        return false;
     }
 
     public boolean tenSamGatunek(Organizm inny) {

@@ -39,7 +39,6 @@ public class Czlowiek extends Zwierze {
 
     @Override
     public void akcja() {
-        // 1. Wykonaj ruch
         if (zaplanowanyRuch != Kierunek.BRAK) {
             Punkt cel = zaplanowanyRuch.krok(getPolozenie());
             if (cel.getX() >= 0 && cel.getX() < SwiatGlobalny.pobierzSwiat().getSzerokosc()
@@ -54,7 +53,6 @@ public class Czlowiek extends Zwierze {
         }
         zaplanowanyRuch = Kierunek.BRAK;
 
-        // 2. Aktywuj umiejętność, jeśli miała się aktywować
         if (czekaNaStartSpecjalnej) {
             specjalnaAktywna = true;
             turyAktywne = 5;
@@ -62,7 +60,6 @@ public class Czlowiek extends Zwierze {
             SwiatGlobalny.dodajLog("Człowiek aktywował całopalenie 🔥 (5 tur)");
         }
 
-        // 3. Całopalenie z nowej pozycji
         if (specjalnaAktywna) {
             List<Punkt> sasiednie = SwiatGlobalny.getSasiedniePola(getPolozenie(), true);
             for (Punkt p : sasiednie) {
@@ -83,20 +80,12 @@ public class Czlowiek extends Zwierze {
             turyCooldown--;
         }
 
-        // 4. Wiek
         zwiekszWiek();
     }
 
     @Override
     public void kolizja(Organizm inny) {
         if (inny == null) return;
-
-        if (inny.nazwa().equals("BarszczSosnowskiego")) {
-            SwiatGlobalny.dodajLog("Człowiek zginął po kontakcie z Barszczem Sosnowskiego.");
-            SwiatGlobalny.usunOrganizm(this);
-            return;
-        }
-
         super.kolizja(inny);
     }
 
@@ -122,14 +111,6 @@ public class Czlowiek extends Zwierze {
 
     public void setSpecjalnaAktywna(boolean aktywna) {
         this.specjalnaAktywna = aktywna;
-    }
-
-    public boolean isCzekaNaStartSpecjalnej() {
-        return czekaNaStartSpecjalnej;
-    }
-
-    public void setCzekaNaStartSpecjalnej(boolean czeka) {
-        this.czekaNaStartSpecjalnej = czeka;
     }
 
     public String getStatusTekst() {

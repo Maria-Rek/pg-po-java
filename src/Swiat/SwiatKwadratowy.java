@@ -3,7 +3,6 @@ package Swiat;
 import Organizmy.Organizm;
 import Organizmy.Zwierzeta.Czlowiek;
 import Utils.Punkt;
-import Swiat.SwiatGlobalny;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -82,10 +81,6 @@ public class SwiatKwadratowy implements ISwiat {
 
     public void zwiekszNumerTury() {
         numerTury++;
-    }
-
-    public void resetujTury() {
-        numerTury = 0;
     }
 
     public int getMaksTury() {

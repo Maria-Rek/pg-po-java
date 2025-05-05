@@ -10,7 +10,7 @@ import java.awt.*;
 
 public class WilczeJagody extends Roslina {
     public WilczeJagody(Punkt polozenie) {
-        super(polozenie, 99); // siła nieistotna, ale może być wysoka
+        super(polozenie, 99);
     }
 
     @Override
@@ -21,12 +21,6 @@ public class WilczeJagody extends Roslina {
     @Override
     public void kolizja(Organizm inny) {
         if (inny == null) return;
-
-        if (this.getClass().equals(inny.getClass())) {
-            // Rozmnażanie jak zwykle między tą samą klasą
-            super.kolizja(inny);
-            return;
-        }
 
         SwiatGlobalny.dodajLog(inny.nazwa() + " zjadł " + nazwa() + " i zginął!");
         SwiatGlobalny.usunOrganizm(inny);

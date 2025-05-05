@@ -7,7 +7,6 @@ import Swiat.SwiatGlobalny;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Random;
 
 public class Zolw extends Zwierze {
     public Zolw(Punkt polozenie) {
@@ -21,26 +20,12 @@ public class Zolw extends Zwierze {
 
     @Override
     public void akcja() {
-        if (new Random().nextInt(4) == 0) { // 25% szansy na ruch
+        if (Math.random() < 0.25) { // 25% szansy na ruch
             super.akcja();
         } else {
             SwiatGlobalny.dodajLog(nazwa() + " nie poruszył się (25% szansy na ruch)");
             zwiekszWiek();
         }
-    }
-
-    @Override
-    public void kolizja(Organizm inny) {
-        if (inny == null) return;
-
-        // Żółw nie niszczy Trawy ani Mlecza – tylko przez nie przechodzi
-        if ("Trawa".equals(inny.nazwa()) || "Mlecz".equals(inny.nazwa())) {
-            setPolozenie(inny.getPolozenie());
-            SwiatGlobalny.dodajLog(nazwa() + " przeszedł przez " + inny.nazwa() + ".");
-            return;
-        }
-
-        super.kolizja(inny);
     }
 
     @Override

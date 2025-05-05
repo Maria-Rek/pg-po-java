@@ -22,12 +22,6 @@ public class Guarana extends Roslina {
     public void kolizja(Organizm inny) {
         if (inny == null) return;
 
-        if (this.getClass().equals(inny.getClass())) {
-            // Rozmnażanie między Guaranami
-            super.kolizja(inny);
-            return;
-        }
-
         inny.setSila(inny.getSila() + 3);
         inny.setPolozenie(getPolozenie());
         SwiatGlobalny.dodajLog(nazwa() + " została zjedzona przez " + inny.nazwa() + " (zyskał +3 siły)");

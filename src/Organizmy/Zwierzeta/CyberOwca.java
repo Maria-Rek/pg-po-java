@@ -44,7 +44,7 @@ public class CyberOwca extends Zwierze {
         if (inny == null) return;
 
         if (inny.nazwa().equals("BarszczSosnowskiego")) {
-            SwiatGlobalny.dodajLog(inny.nazwa() + " został zabity przez CyberOwcę (odporną na Barszcz)");
+            SwiatGlobalny.dodajLog(inny.nazwa() + " został zabity przez CyberOwcę");
             SwiatGlobalny.usunOrganizm(inny);
             setPolozenie(inny.getPolozenie());
             return;

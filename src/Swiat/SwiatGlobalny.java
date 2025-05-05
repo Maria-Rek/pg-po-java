@@ -23,10 +23,6 @@ public class SwiatGlobalny {
         return instancja;
     }
 
-    public static boolean czyPoleZajete(Punkt p) {
-        return instancja.czyPoleZajete(p);
-    }
-
     public static Organizm getOrganizmNa(Punkt p) {
         return instancja.znajdzOrganizm(p);
     }
@@ -39,12 +35,6 @@ public class SwiatGlobalny {
         instancja.dodajOrganizm(o);
     }
 
-    public static void wypiszLogi() {
-        if (instancja != null) {
-            instancja.wypiszLogi();
-        }
-    }
-
     public static void setPoleLogow(JTextPane pole) {
         poleLogow = pole;
     }
@@ -55,7 +45,7 @@ public class SwiatGlobalny {
             SimpleAttributeSet styl = new SimpleAttributeSet();
             String lower = tekst.toLowerCase();
 
-            Color kolor = new Color(218, 73, 165); // 💖 domyślny różowy
+            Color kolor = new Color(218, 73, 165);
 
             if (lower.contains("zgin") || lower.contains("zabity") || lower.contains("atak")) {
                 kolor = Color.RED;
@@ -91,7 +81,7 @@ public class SwiatGlobalny {
     }
 
     public static List<Punkt> getSasiedniePola(Punkt srodek) {
-        return getSasiedniePola(srodek, true); // domyślnie Moore
+        return getSasiedniePola(srodek, true);
     }
 
     public static List<Punkt> getSasiedniePola(Punkt srodek, boolean moore) {

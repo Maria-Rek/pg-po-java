@@ -62,6 +62,8 @@ public class Antylopa extends Zwierze {
                 setPolozenie(ucieczka);
                 SwiatGlobalny.dodajLog(nazwa() + " uciekła przed " + inny.nazwa());
                 return;
+            } else {
+                SwiatGlobalny.dodajLog(nazwa() + " chciała uciec, ale nie miała gdzie.");
             }
         }
 

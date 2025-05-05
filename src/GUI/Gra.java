@@ -20,6 +20,7 @@ public class Gra extends JFrame {
 
     public Gra() {
         setTitle("Maria Rek 203174");
+        setIconImage(new ImageIcon("src/Resources/logo.png").getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(new Color(227, 152, 214));
         setLayout(new BorderLayout());
@@ -77,7 +78,6 @@ public class Gra extends JFrame {
                 swiat = new SwiatKwadratowy(szerokosc, wysokosc);
                 swiat.setMaksTury(tury);
 
-                // wybór sposobu dodania organizmów
                 Object[] sposoby = {"Ręcznie", "Losowo"};
                 int wybor = JOptionPane.showOptionDialog(null,
                         "Jak chcesz dodać organizmy?",
@@ -250,7 +250,6 @@ public class Gra extends JFrame {
 
         Random rand = new Random();
 
-        // Dodaj Człowieka
         while (true) {
             int x = rand.nextInt(swiat.getSzerokosc());
             int y = rand.nextInt(swiat.getWysokosc());
@@ -262,7 +261,6 @@ public class Gra extends JFrame {
             }
         }
 
-        // Dodaj inne organizmy
         for (int i = 0; i < organizmyDoDodania; i++) {
             int x = rand.nextInt(swiat.getSzerokosc());
             int y = rand.nextInt(swiat.getWysokosc());
