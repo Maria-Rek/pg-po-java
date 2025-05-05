@@ -67,6 +67,7 @@ public abstract class Zwierze extends Organizm {
             return;
         }
 
+        // ⚔️ Walka – zgodnie z instrukcją
         if (this.sila >= inny.getSila()) {
             SwiatGlobalny.dodajLog(inny.nazwa() + " został zabity przez " + this.nazwa());
             SwiatGlobalny.usunOrganizm(inny);

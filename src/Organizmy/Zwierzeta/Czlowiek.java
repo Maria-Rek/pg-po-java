@@ -95,12 +95,24 @@ public class Czlowiek extends Zwierze {
         return turyCooldown;
     }
 
+    public void setCooldown(int cooldown) {
+        this.turyCooldown = cooldown;
+    }
+
     public int getTuryAktywne() {
         return turyAktywne;
     }
 
+    public void setTuryAktywne(int turyAktywne) {
+        this.turyAktywne = turyAktywne;
+    }
+
     public boolean isSpecjalnaAktywna() {
         return specjalnaAktywna;
+    }
+
+    public void setSpecjalnaAktywna(boolean aktywna) {
+        this.specjalnaAktywna = aktywna;
     }
 
     public String getStatusTekst() {

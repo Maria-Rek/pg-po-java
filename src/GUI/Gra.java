@@ -23,7 +23,7 @@ public class Gra extends JFrame {
     public Gra() {
         setTitle("Maria Rek 203174");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setBackground(new Color(227, 152, 214)); // jasnoróżowe tło
+        getContentPane().setBackground(new Color(227, 152, 214));
         setLayout(new BorderLayout());
 
         int szerokosc = 10;
@@ -129,44 +129,7 @@ public class Gra extends JFrame {
             widok.wykonajTure();
 
             if (swiat.getNumerTury() >= maksTury) {
-                Object[] opcje = {"Zakończ", "Nowa gra", "Wczytaj grę"};
-                int wybor = JOptionPane.showOptionDialog(this,
-                        "Gra zakończona po " + maksTury + " turach.\nCo chcesz teraz zrobić?",
-                        "Koniec gry",
-                        JOptionPane.DEFAULT_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        opcje,
-                        opcje[0]);
-
-                switch (wybor) {
-                    case 0 -> System.exit(0);
-                    case 1 -> {
-                        dispose();
-                        new Gra();
-                    }
-                    case 2 -> {
-                        String nazwa = JOptionPane.showInputDialog(this, "Podaj nazwę pliku do wczytania:", "save");
-                        if (nazwa != null && !nazwa.trim().isEmpty()) {
-                            SwiatKwadratowy nowy = SwiatKwadratowy.wczytajZPliku(nazwa.trim());
-                            if (nowy != null) {
-                                remove(widok);
-                                swiat = nowy;
-                                maksTury = nowy.getMaksTury();
-                                SwiatGlobalny.ustawSwiat(nowy);
-                                widok = new Widok(swiat, maksTury, infoLabel);
-                                add(widok, BorderLayout.CENTER);
-                                revalidate();
-                                repaint();
-                                SwiatGlobalny.dodajLog("Wczytano nową grę z pliku.");
-                            } else {
-                                JOptionPane.showMessageDialog(this, "Nie udało się wczytać pliku.");
-                            }
-                            widok.requestFocusInWindow();
-                        }
-                    }
-                }
-                return;
+                SwingUtilities.invokeLater(() -> pokazMenuKoncowe());
             }
 
             widok.requestFocusInWindow();
@@ -213,6 +176,45 @@ public class Gra extends JFrame {
         setVisible(true);
 
         SwingUtilities.invokeLater(() -> widok.requestFocusInWindow());
+    }
+
+    private void pokazMenuKoncowe() {
+        Object[] opcje = {"Zakończ", "Nowa gra", "Wczytaj grę"};
+        int wybor = JOptionPane.showOptionDialog(this,
+                "Gra zakończona po " + maksTury + " turach.\nCo chcesz teraz zrobić?",
+                "Koniec gry",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opcje,
+                opcje[0]);
+
+        switch (wybor) {
+            case 0 -> System.exit(0);
+            case 1 -> {
+                dispose();
+                new Gra();
+            }
+            case 2 -> {
+                String nazwa = JOptionPane.showInputDialog(this, "Podaj nazwę pliku do wczytania:", "save");
+                if (nazwa != null && !nazwa.trim().isEmpty()) {
+                    SwiatKwadratowy nowy = SwiatKwadratowy.wczytajZPliku(nazwa.trim());
+                    if (nowy != null) {
+                        remove(widok);
+                        swiat = nowy;
+                        maksTury = nowy.getMaksTury();
+                        SwiatGlobalny.ustawSwiat(nowy);
+                        widok = new Widok(swiat, maksTury, infoLabel);
+                        add(widok, BorderLayout.CENTER);
+                        revalidate();
+                        repaint();
+                        SwiatGlobalny.dodajLog("Wczytano nową grę z pliku.");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Nie udało się wczytać pliku.");
+                    }
+                }
+            }
+        }
     }
 
     public static void main(String[] args) {

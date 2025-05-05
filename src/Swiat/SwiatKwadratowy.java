@@ -1,6 +1,7 @@
 package Swiat;
 
 import Organizmy.Organizm;
+import Organizmy.Zwierzeta.Czlowiek;
 import Utils.Punkt;
 import Swiat.SwiatGlobalny;
 
@@ -102,7 +103,12 @@ public class SwiatKwadratowy implements ISwiat {
             writer.println("TURA " + numerTury);
             writer.println("MAX_TURY " + maksTury);
             for (Organizm o : organizmy) {
-                writer.println(o.nazwa() + " " + o.getPolozenie().getX() + " " + o.getPolozenie().getY() + " " + o.getWiek());
+                if (o instanceof Czlowiek cz) {
+                    writer.println("Czlowiek " + o.getPolozenie().getX() + " " + o.getPolozenie().getY() + " " + o.getWiek()
+                            + " " + cz.getCooldown() + " " + cz.getTuryAktywne() + " " + cz.isSpecjalnaAktywna());
+                } else {
+                    writer.println(o.nazwa() + " " + o.getPolozenie().getX() + " " + o.getPolozenie().getY() + " " + o.getWiek());
+                }
             }
             SwiatGlobalny.dodajLog("Zapisano stan gry do pliku " + plik.getPath());
         } catch (IOException e) {
@@ -142,7 +148,17 @@ public class SwiatKwadratowy implements ISwiat {
 
                 Punkt p = new Punkt(x, y);
                 Class<? extends Organizm> klasa = SwiatGlobalny.klasaDlaNazwy(nazwaOrganizmu);
-                if (klasa != null) {
+
+                if ("Czlowiek".equals(nazwaOrganizmu)) {
+                    Czlowiek cz = new Czlowiek(p);
+                    cz.setWiek(wiek);
+                    if (pola.length >= 7) {
+                        cz.setCooldown(Integer.parseInt(pola[4]));
+                        cz.setTuryAktywne(Integer.parseInt(pola[5]));
+                        cz.setSpecjalnaAktywna(Boolean.parseBoolean(pola[6]));
+                    }
+                    swiat.dodajOrganizm(cz);
+                } else if (klasa != null) {
                     Organizm o = klasa.getConstructor(Punkt.class).newInstance(p);
                     o.setWiek(wiek);
                     swiat.dodajOrganizm(o);

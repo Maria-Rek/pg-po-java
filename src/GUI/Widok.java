@@ -54,11 +54,17 @@ public class Widok extends JPanel {
                 if (x < 0 || x >= swiat.getSzerokosc() || y < 0 || y >= swiat.getWysokosc()) return;
 
                 kliknietePole = new Punkt(x, y);
+                Organizm o = swiat.znajdzOrganizm(kliknietePole);
 
-                if (!swiat.czyPoleZajete(kliknietePole)) {
+                if (o == null) {
                     menuDodawania.show(Widok.this, e.getX(), e.getY());
                 } else {
-                    swiat.dodajLog("Pole (" + x + "," + y + ") jest zajęte.");
+                    String info = "Organizm: " + o.nazwa() +
+                            " | Pozycja: " + o.getPolozenie() +
+                            " | Wiek: " + o.getWiek() +
+                            " | Inicjatywa: " + o.getInicjatywa();
+                    SwiatGlobalny.dodajLog(info);
+                    swiat.wypiszLogi(); // natychmiastowe logi
                 }
 
                 requestFocusInWindow();
@@ -70,7 +76,8 @@ public class Widok extends JPanel {
             public void keyPressed(KeyEvent e) {
                 Czlowiek cz = znajdzCzlowieka();
                 if (cz == null) {
-                    swiat.dodajLog("Brak Człowieka w świecie.");
+                    SwiatGlobalny.dodajLog("Brak Człowieka w świecie.");
+                    swiat.wypiszLogi();
                     return;
                 }
 
@@ -98,17 +105,20 @@ public class Widok extends JPanel {
         JMenuItem item = new JMenuItem(nazwa);
         item.addActionListener(e -> {
             if (klasa == Czlowiek.class && znajdzCzlowieka() != null) {
-                swiat.dodajLog("Na planszy już znajduje się Człowiek. Nie można dodać drugiego.");
+                SwiatGlobalny.dodajLog("Na planszy już znajduje się Człowiek. Nie można dodać drugiego.");
+                swiat.wypiszLogi();
                 return;
             }
             try {
                 Organizm nowy = klasa.getDeclaredConstructor(Punkt.class).newInstance(kliknietePole);
                 swiat.dodajOrganizm(nowy);
-                swiat.dodajLog("Dodano: " + nowy.nazwa() + " na " + kliknietePole);
+                SwiatGlobalny.dodajLog("Dodano: " + nowy.nazwa() + " na " + kliknietePole);
+                swiat.wypiszLogi();
                 repaint();
             } catch (Exception ex) {
                 ex.printStackTrace();
-                swiat.dodajLog("Błąd przy dodawaniu organizmu: " + nazwa);
+                SwiatGlobalny.dodajLog("Błąd przy dodawaniu organizmu: " + nazwa);
+                swiat.wypiszLogi();
             }
         });
         menuDodawania.add(item);
@@ -168,20 +178,17 @@ public class Widok extends JPanel {
         repaint();
         swiat.wypiszLogi();
         aktualizujInfoLabel();
-
-        if (swiat.getNumerTury() >= maxTury) {
-            JOptionPane.showMessageDialog(this, "Gra zakończona – osiągnięto maksymalną liczbę tur: " + maxTury);
-            System.exit(0);
-        }
     }
 
     private void aktualizujInfoLabel() {
-        String tekst = "Tura: " + swiat.getNumerTury();
+        String tekst = "Tura: " + swiat.getNumerTury() +
+                " | Żyjące organizmy: " + swiat.getOrganizmy().size() +
+                " | Pozostało tur: " + (maxTury - swiat.getNumerTury());
 
         Czlowiek cz = znajdzCzlowieka();
         if (cz != null) {
             if (cz.isSpecjalnaAktywna()) {
-                tekst += " | Umiejętność: AKTYWNA (" + cz.getTuryAktywne() + " tury)";
+                tekst += " | Umiejętność: AKTYWNA (" + cz.getTuryAktywne() + " tury) 🔥";
             } else if (cz.getCooldown() > 0) {
                 tekst += " | Cooldown: " + cz.getCooldown() + " tur";
             } else {
