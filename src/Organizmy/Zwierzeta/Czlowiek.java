@@ -14,6 +14,7 @@ public class Czlowiek extends Zwierze {
     private boolean specjalnaAktywna = false;
     private int turyAktywne = 0;
     private int turyCooldown = 0;
+    private boolean czekaNaStartSpecjalnej = false;
     private Kierunek zaplanowanyRuch = Kierunek.BRAK;
 
     public Czlowiek(Punkt polozenie) {
@@ -30,17 +31,40 @@ public class Czlowiek extends Zwierze {
     }
 
     public void aktywujSpecjalna() {
-        if (!specjalnaAktywna && turyCooldown == 0) {
-            specjalnaAktywna = true;
-            turyAktywne = 5;
-            SwiatGlobalny.dodajLog("Człowiek użył umiejętności: całopalenie 🔥");
+        if (!specjalnaAktywna && turyCooldown == 0 && !czekaNaStartSpecjalnej) {
+            czekaNaStartSpecjalnej = true;
+            SwiatGlobalny.dodajLog("Człowiek przygotowuje się do użycia całopalenia 🔥");
         }
     }
 
     @Override
     public void akcja() {
+        // 1. Wykonaj ruch
+        if (zaplanowanyRuch != Kierunek.BRAK) {
+            Punkt cel = zaplanowanyRuch.krok(getPolozenie());
+            if (cel.getX() >= 0 && cel.getX() < SwiatGlobalny.pobierzSwiat().getSzerokosc()
+                    && cel.getY() >= 0 && cel.getY() < SwiatGlobalny.pobierzSwiat().getWysokosc()) {
+
+                Organizm o = SwiatGlobalny.getOrganizmNa(cel);
+                if (o != null) kolizja(o);
+                else setPolozenie(cel);
+            } else {
+                SwiatGlobalny.dodajLog("Człowiek chciał wyjść poza mapę!");
+            }
+        }
+        zaplanowanyRuch = Kierunek.BRAK;
+
+        // 2. Aktywuj umiejętność, jeśli miała się aktywować
+        if (czekaNaStartSpecjalnej) {
+            specjalnaAktywna = true;
+            turyAktywne = 5;
+            czekaNaStartSpecjalnej = false;
+            SwiatGlobalny.dodajLog("Człowiek aktywował całopalenie 🔥 (5 tur)");
+        }
+
+        // 3. Całopalenie z nowej pozycji
         if (specjalnaAktywna) {
-            List<Punkt> sasiednie = SwiatGlobalny.getSasiedniePola(getPolozenie());
+            List<Punkt> sasiednie = SwiatGlobalny.getSasiedniePola(getPolozenie(), true);
             for (Punkt p : sasiednie) {
                 Organizm o = SwiatGlobalny.getOrganizmNa(p);
                 if (o != null && o != this) {
@@ -53,28 +77,13 @@ public class Czlowiek extends Zwierze {
             if (turyAktywne == 0) {
                 specjalnaAktywna = false;
                 turyCooldown = 5;
-                SwiatGlobalny.dodajLog("Umiejętność Człowieka wygasła. Rozpoczęto 5-tur cooldown.");
+                SwiatGlobalny.dodajLog("Umiejętność Człowieka wygasła. Cooldown 5 tur.");
             }
         } else if (turyCooldown > 0) {
             turyCooldown--;
         }
 
-        if (zaplanowanyRuch != Kierunek.BRAK) {
-            Punkt cel = zaplanowanyRuch.krok(getPolozenie());
-
-            if (cel.getX() >= 0 && cel.getX() < SwiatGlobalny.pobierzSwiat().getSzerokosc()
-                    && cel.getY() >= 0 && cel.getY() < SwiatGlobalny.pobierzSwiat().getWysokosc()) {
-
-                Organizm o = SwiatGlobalny.getOrganizmNa(cel);
-                if (o != null) kolizja(o);
-                else setPolozenie(cel);
-
-            } else {
-                SwiatGlobalny.dodajLog("Człowiek chciał wyjść poza mapę!");
-            }
-        }
-
-        zaplanowanyRuch = Kierunek.BRAK;
+        // 4. Wiek
         zwiekszWiek();
     }
 
@@ -115,13 +124,23 @@ public class Czlowiek extends Zwierze {
         this.specjalnaAktywna = aktywna;
     }
 
+    public boolean isCzekaNaStartSpecjalnej() {
+        return czekaNaStartSpecjalnej;
+    }
+
+    public void setCzekaNaStartSpecjalnej(boolean czeka) {
+        this.czekaNaStartSpecjalnej = czeka;
+    }
+
     public String getStatusTekst() {
         if (specjalnaAktywna) {
             return "Aktywna (" + turyAktywne + "/5) 🔥";
+        } else if (czekaNaStartSpecjalnej) {
+            return "Aktywuje się za chwilę ⏳";
         } else if (turyCooldown > 0) {
             return "Cooldown (" + turyCooldown + "/5)";
         } else {
-            return "Gotowa 💪";
+            return "Gotowa";
         }
     }
 

@@ -4,12 +4,10 @@ import Swiat.SwiatKwadratowy;
 import Swiat.SwiatGlobalny;
 import Organizmy.Organizm;
 import Organizmy.Zwierzeta.Czlowiek;
-import Utils.Kierunek;
 import Utils.Punkt;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 
@@ -78,6 +76,20 @@ public class Gra extends JFrame {
 
                 swiat = new SwiatKwadratowy(szerokosc, wysokosc);
                 swiat.setMaksTury(tury);
+
+                // wybór sposobu dodania organizmów
+                Object[] sposoby = {"Ręcznie", "Losowo"};
+                int wybor = JOptionPane.showOptionDialog(null,
+                        "Jak chcesz dodać organizmy?",
+                        "Dodawanie organizmów",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        sposoby,
+                        sposoby[0]);
+
+                if (wybor == 1) dodajLosoweOrganizmy(swiat);
+
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Niepoprawne dane. Użyto domyślnych wartości.");
                 swiat = new SwiatKwadratowy(10, 10);
@@ -129,7 +141,7 @@ public class Gra extends JFrame {
             widok.wykonajTure();
 
             if (swiat.getNumerTury() >= maksTury) {
-                SwingUtilities.invokeLater(() -> pokazMenuKoncowe());
+                SwingUtilities.invokeLater(this::pokazMenuKoncowe);
             }
 
             widok.requestFocusInWindow();
@@ -215,6 +227,60 @@ public class Gra extends JFrame {
                 }
             }
         }
+    }
+
+    private void dodajLosoweOrganizmy(SwiatKwadratowy swiat) {
+        List<Class<? extends Organizm>> klasy = List.of(
+                Organizmy.Rosliny.Trawa.class,
+                Organizmy.Rosliny.Mlecz.class,
+                Organizmy.Rosliny.Guarana.class,
+                Organizmy.Rosliny.WilczeJagody.class,
+                Organizmy.Rosliny.BarszczSosnowskiego.class,
+                Organizmy.Zwierzeta.Owca.class,
+                Organizmy.Zwierzeta.Wilk.class,
+                Organizmy.Zwierzeta.Lis.class,
+                Organizmy.Zwierzeta.Zolw.class,
+                Organizmy.Zwierzeta.Antylopa.class,
+                Organizmy.Zwierzeta.CyberOwca.class
+        );
+
+        int poleIlosc = swiat.getSzerokosc() * swiat.getWysokosc();
+        int organizmyDoDodania = (int) (poleIlosc * (0.2 + Math.random() * 0.15));
+        Set<Punkt> zajete = new HashSet<>();
+
+        Random rand = new Random();
+
+        // Dodaj Człowieka
+        while (true) {
+            int x = rand.nextInt(swiat.getSzerokosc());
+            int y = rand.nextInt(swiat.getWysokosc());
+            Punkt p = new Punkt(x, y);
+            if (!zajete.contains(p)) {
+                swiat.dodajOrganizm(new Czlowiek(p));
+                zajete.add(p);
+                break;
+            }
+        }
+
+        // Dodaj inne organizmy
+        for (int i = 0; i < organizmyDoDodania; i++) {
+            int x = rand.nextInt(swiat.getSzerokosc());
+            int y = rand.nextInt(swiat.getWysokosc());
+            Punkt p = new Punkt(x, y);
+            if (zajete.contains(p)) {
+                i--; // ponów próbę
+                continue;
+            }
+
+            Class<? extends Organizm> klasa = klasy.get(rand.nextInt(klasy.size()));
+            try {
+                Organizm o = klasa.getDeclaredConstructor(Punkt.class).newInstance(p);
+                swiat.dodajOrganizm(o);
+                zajete.add(p);
+            } catch (Exception ignored) {}
+        }
+
+        swiat.dodajLog("Wylosowano " + (organizmyDoDodania + 1) + " organizmów (w tym Człowiek).");
     }
 
     public static void main(String[] args) {

@@ -31,6 +31,8 @@ public class Widok extends JPanel {
         setFocusable(true);
         requestFocusInWindow();
 
+        SwiatGlobalny.ustawPanelWidoku(this); // 🔥 wymagane do repaintowania
+
         menuDodawania = new JPopupMenu();
         dodajOpcje("Trawa", Organizmy.Rosliny.Trawa.class);
         dodajOpcje("Mlecz", Organizmy.Rosliny.Mlecz.class);
@@ -64,7 +66,6 @@ public class Widok extends JPanel {
                             " | Wiek: " + o.getWiek() +
                             " | Inicjatywa: " + o.getInicjatywa();
                     SwiatGlobalny.dodajLog(info);
-                    swiat.wypiszLogi(); // natychmiastowe logi
                 }
 
                 requestFocusInWindow();
@@ -77,7 +78,6 @@ public class Widok extends JPanel {
                 Czlowiek cz = znajdzCzlowieka();
                 if (cz == null) {
                     SwiatGlobalny.dodajLog("Brak Człowieka w świecie.");
-                    swiat.wypiszLogi();
                     return;
                 }
 
@@ -106,19 +106,16 @@ public class Widok extends JPanel {
         item.addActionListener(e -> {
             if (klasa == Czlowiek.class && znajdzCzlowieka() != null) {
                 SwiatGlobalny.dodajLog("Na planszy już znajduje się Człowiek. Nie można dodać drugiego.");
-                swiat.wypiszLogi();
                 return;
             }
             try {
                 Organizm nowy = klasa.getDeclaredConstructor(Punkt.class).newInstance(kliknietePole);
                 swiat.dodajOrganizm(nowy);
                 SwiatGlobalny.dodajLog("Dodano: " + nowy.nazwa() + " na " + kliknietePole);
-                swiat.wypiszLogi();
                 repaint();
             } catch (Exception ex) {
                 ex.printStackTrace();
                 SwiatGlobalny.dodajLog("Błąd przy dodawaniu organizmu: " + nazwa);
-                swiat.wypiszLogi();
             }
         });
         menuDodawania.add(item);
@@ -176,7 +173,6 @@ public class Widok extends JPanel {
 
         swiat.zwiekszNumerTury();
         repaint();
-        swiat.wypiszLogi();
         aktualizujInfoLabel();
     }
 
@@ -187,13 +183,7 @@ public class Widok extends JPanel {
 
         Czlowiek cz = znajdzCzlowieka();
         if (cz != null) {
-            if (cz.isSpecjalnaAktywna()) {
-                tekst += " | Umiejętność: AKTYWNA (" + cz.getTuryAktywne() + " tury) 🔥";
-            } else if (cz.getCooldown() > 0) {
-                tekst += " | Cooldown: " + cz.getCooldown() + " tur";
-            } else {
-                tekst += " | Umiejętność: GOTOWA (SPACJA)";
-            }
+            tekst += " | Umiejętność: " + cz.getStatusTekst();
         } else {
             tekst += " | Człowiek nieobecny";
         }

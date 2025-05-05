@@ -5,7 +5,7 @@ import Organizmy.Organizm;
 
 import javax.swing.*;
 import javax.swing.text.*;
-import java.awt.Color;
+import java.awt.*;
 import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.ArrayList;
@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class SwiatGlobalny {
     private static ISwiat instancja;
     private static JTextPane poleLogow;
+    private static JPanel panelWidoku;
 
     public static void ustawSwiat(ISwiat swiat) {
         instancja = swiat;
@@ -38,6 +39,12 @@ public class SwiatGlobalny {
         instancja.dodajOrganizm(o);
     }
 
+    public static void wypiszLogi() {
+        if (instancja != null) {
+            instancja.wypiszLogi();
+        }
+    }
+
     public static void setPoleLogow(JTextPane pole) {
         poleLogow = pole;
     }
@@ -48,15 +55,15 @@ public class SwiatGlobalny {
             SimpleAttributeSet styl = new SimpleAttributeSet();
             String lower = tekst.toLowerCase();
 
-            Color kolor = new Color(218, 73, 165);
+            Color kolor = new Color(218, 73, 165); // 💖 domyślny różowy
 
             if (lower.contains("zgin") || lower.contains("zabity") || lower.contains("atak")) {
                 kolor = Color.RED;
-            }else if (lower.contains("rozsia")) {
+            } else if (lower.contains("rozsia")) {
                 kolor = Color.GREEN.darker();
             } else if (lower.contains("rozmnoży") || lower.contains("rozmnoz")) {
                 kolor = Color.CYAN.darker();
-            }else if (lower.contains("całopalenie") || lower.contains("spalony")){
+            } else if (lower.contains("całopalenie") || lower.contains("spalony")) {
                 kolor = Color.ORANGE.darker();
             }
 
@@ -84,6 +91,10 @@ public class SwiatGlobalny {
     }
 
     public static List<Punkt> getSasiedniePola(Punkt srodek) {
+        return getSasiedniePola(srodek, true); // domyślnie Moore
+    }
+
+    public static List<Punkt> getSasiedniePola(Punkt srodek, boolean moore) {
         List<Punkt> pola = new ArrayList<>();
         int szer = instancja.getSzerokosc();
         int wys = instancja.getWysokosc();
@@ -91,8 +102,11 @@ public class SwiatGlobalny {
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
                 if (dx == 0 && dy == 0) continue;
+                if (!moore && Math.abs(dx) + Math.abs(dy) != 1) continue;
+
                 int nx = srodek.getX() + dx;
                 int ny = srodek.getY() + dy;
+
                 if (nx >= 0 && nx < szer && ny >= 0 && ny < wys) {
                     pola.add(new Punkt(nx, ny));
                 }
@@ -128,5 +142,15 @@ public class SwiatGlobalny {
             case "Czlowiek" -> Organizmy.Zwierzeta.Czlowiek.class;
             default -> null;
         };
+    }
+
+    public static void ustawPanelWidoku(JPanel panel) {
+        panelWidoku = panel;
+    }
+
+    public static void wymusRepaint() {
+        if (panelWidoku != null) {
+            panelWidoku.repaint();
+        }
     }
 }
