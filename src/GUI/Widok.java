@@ -17,7 +17,6 @@ public class Widok extends JPanel {
     private final SwiatKwadratowy swiat;
     private final int maxTury;
     private final int rozmiarPola = 50;
-    private Punkt kliknietePole;
     private final JPopupMenu menuDodawania;
     private final JLabel infoLabel;
 
@@ -55,11 +54,12 @@ public class Widok extends JPanel {
 
                 if (x < 0 || x >= swiat.getSzerokosc() || y < 0 || y >= swiat.getWysokosc()) return;
 
-                kliknietePole = new Punkt(x, y);
+                Punkt kliknietePole = new Punkt(x, y);
                 Organizm o = swiat.znajdzOrganizm(kliknietePole);
 
                 if (o == null) {
                     menuDodawania.show(Widok.this, e.getX(), e.getY());
+                    menuDodawania.putClientProperty("punkt", kliknietePole);
                 } else {
                     String info = "Organizm: " + o.nazwa() +
                             " | Pozycja: " + o.getPolozenie() +
@@ -103,7 +103,8 @@ public class Widok extends JPanel {
 
     private void dodajOpcje(String nazwa, Class<? extends Organizm> klasa) {
         JMenuItem item = new JMenuItem(nazwa);
-        item.addActionListener(e -> {
+        item.addActionListener(_ -> {
+            Punkt kliknietePole = (Punkt) menuDodawania.getClientProperty("punkt");
             if (klasa == Czlowiek.class && znajdzCzlowieka() != null) {
                 SwiatGlobalny.dodajLog("Na planszy już znajduje się Człowiek. Nie można dodać drugiego.");
                 return;

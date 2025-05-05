@@ -137,17 +137,15 @@ public class Gra extends JFrame {
         przyciski.add(wczytajBtn);
         przyciski.add(nowaGraBtn);
 
-        turaBtn.addActionListener(e -> {
+        turaBtn.addActionListener(_ -> {
             widok.wykonajTure();
-
             if (swiat.getNumerTury() >= maksTury) {
                 SwingUtilities.invokeLater(this::pokazMenuKoncowe);
             }
-
             widok.requestFocusInWindow();
         });
 
-        zapiszBtn.addActionListener(e -> {
+        zapiszBtn.addActionListener(_ -> {
             String nazwa = JOptionPane.showInputDialog(this, "Podaj nazwę pliku do zapisu:", "save");
             if (nazwa != null && !nazwa.trim().isEmpty()) {
                 swiat.zapiszDoPliku(nazwa.trim());
@@ -155,7 +153,7 @@ public class Gra extends JFrame {
             widok.requestFocusInWindow();
         });
 
-        wczytajBtn.addActionListener(e -> {
+        wczytajBtn.addActionListener(_ -> {
             String nazwa = JOptionPane.showInputDialog(this, "Podaj nazwę pliku do wczytania:", "save");
             if (nazwa != null && !nazwa.trim().isEmpty()) {
                 SwiatKwadratowy nowy = SwiatKwadratowy.wczytajZPliku(nazwa.trim());
@@ -176,7 +174,7 @@ public class Gra extends JFrame {
             }
         });
 
-        nowaGraBtn.addActionListener(e -> {
+        nowaGraBtn.addActionListener(_ -> {
             dispose();
             new Gra();
         });
@@ -245,7 +243,7 @@ public class Gra extends JFrame {
         );
 
         int poleIlosc = swiat.getSzerokosc() * swiat.getWysokosc();
-        int organizmyDoDodania = (int) (poleIlosc * (0.2 + Math.random() * 0.15));
+        int organizmyDoDodania = (int) (poleIlosc * (0.2 + Math.random() * 0.15)); //20-25%
         Set<Punkt> zajete = new HashSet<>();
 
         Random rand = new Random();
@@ -266,7 +264,7 @@ public class Gra extends JFrame {
             int y = rand.nextInt(swiat.getWysokosc());
             Punkt p = new Punkt(x, y);
             if (zajete.contains(p)) {
-                i--; // ponów próbę
+                i--;
                 continue;
             }
 
