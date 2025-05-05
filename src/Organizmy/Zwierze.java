@@ -67,7 +67,7 @@ public abstract class Zwierze extends Organizm {
             return;
         }
 
-        // ⚔️ Walka – zgodnie z instrukcją
+        // ⚔️ Walka – atakujący zawsze wygrywa przy równej sile
         if (this.sila >= inny.getSila()) {
             SwiatGlobalny.dodajLog(inny.nazwa() + " został zabity przez " + this.nazwa());
             SwiatGlobalny.usunOrganizm(inny);
