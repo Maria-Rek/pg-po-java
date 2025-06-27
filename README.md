@@ -1,64 +1,53 @@
-# Programowanie Obiektowe  
-Object Oriented Programming Project Java (Swing GUI)  
-PO – Politechnika Gdańska, Informatyka  
+# Object-Oriented Programming (Java)
 
-## Opis projektu
-Projekt to gra symulacyjna w świecie 2D, w której organizmy żyją, poruszają się, walczą i rozmnażają.  
-Każdy organizm ma unikalne zachowanie – niektóre poruszają się losowo, inne podejmują decyzje zależnie od otoczenia.
+## Project Overview
 
-Graczem steruje **Człowiek** przy pomocy klawiatury (strzałki).  
-Posiada on specjalną umiejętność – **całopalenie**, która przez 5 tur zabija organizmy wokół niego, a następnie ma 5 tur cooldownu.
+GUI-based 2D world simulator where various organisms live, move, fight, and reproduce according to individual rules.
 
-W grze występuje również specjalne zwierzę – **CyberOwca**, która automatycznie szuka i niszczy niebezpieczny **Barszcz Sosnowskiego**.
-
-Rozgrywka odbywa się w trybie turowym – organizmy wykonują akcje zgodnie z inicjatywą i wiekiem.  
-Gra posiada GUI z planszą, logami wydarzeń, panelem informacji i obsługą zapisu/wczytywania stanu gry.
+The game is **turn-based**, with organisms acting based on initiative and age, displaying the board, event logs, and organism info in a graphical interface.  
+Game state can be saved/loaded from a text file.
 
 ---
 
-## Wymagania i funkcjonalności  
-✅ Implementacja interfejsu `ISwiat` oraz klas organizmów  
-✅ Dziedziczenie: `Zwierze`, `Roslina` z polimorfizmem i hermetyzacją  
-✅ Implementacja 6 zwierząt:
-- Wilk  
-- Owca  
-- Lis (unika silniejszych)  
-- Żółw (25% szansy na ruch, odpiera słabszych)  
-- Antylopa (zasięg 2, ucieczka 50%)  
-- CyberOwca (szuka Barszczu)
+## Features
 
-✅ Implementacja 5 roślin:
-- Trawa  
-- Mlecz (rozsiewa się 3 razy)  
-- Guarana (dodaje siłę +3)  
-- Wilcze Jagody (trujące)  
-- Barszcz Sosnowskiego (zabija wszystko wokół)
-
-✅ **Człowiek**:
-- Ruch: klawisze ←↑↓→  
-- Umiejętność specjalna: całopalenie
-  - 5 tur działania
-  - 5 tur cooldownu
-  - aktywacja spacją
-
-✅ Obsługa kolizji i rozmnażania organizmów tego samego typu  
-✅ Wykonanie tur wg inicjatywy i wieku  
-✅ Ośmiosąsiedztwo przy ruchu i rozmnażaniu  
-✅ Graficzna reprezentacja organizmów (ikony PNG)  
-✅ Zapisywanie i wczytywanie gry z pliku tekstowego
+- `ISwiat` interface and organism classes
+- Inheritance with `Animal` and `Plant` classes using polymorphism and encapsulation
+- 6 animals:
+  - Wolf
+  - Sheep
+  - Fox (avoids stronger organisms)
+  - Turtle (25% move chance, blocks weaker attacks)
+  - Antelope (range 2, 50% escape chance)
+  - CyberSheep (hunts Hogweed)
+- 5 plants:
+  - Grass
+  - Dandelion (3 spread attempts)
+  - Guarana (+3 strength)
+  - Deadly Nightshade (poisonous)
+  - Hogweed (kills surrounding organisms except CyberSheep)
+- **Human**:
+  - Controlled with ←↑↓→
+  - “Firestorm” ability:
+    - 5 turns active
+    - 5 turns cooldown
+    - Activated with spacebar
+- Collision handling and reproduction of same-species organisms
+- Turn priority based on initiative and age
+- 8-neighborhood movement and reproduction
+- Graphical representation using PNG icons (Swing GUI)
+- Save/load system using text files
 
 ---
 
-## Struktura katalogów  
-- `GUI/` – główne okno (`Gra.java`), plansza (`Widok.java`)  
-- `Swiat/` – interfejs, logika świata, singleton  
-- `Organizmy/` – klasy organizmów + podfoldery `Rosliny/`, `Zwierzeta/`  
-- `Utils/` – pomocnicze klasy `Punkt`, `Kierunek`  
-- `Resources/` – pliki graficzne organizmów  
-- `Zapis/` – domyślny folder zapisu stanu gry  
+## Directory Structure
+
+- `GUI/` – main window (`Gra.java`), board view (`Widok.java`)
+- `Swiat/` – interface, world logic, singleton
+- `Organizmy/` – organism classes with `Rosliny/` and `Zwierzeta/` subfolders
+- `Utils/` – helper classes (`Punkt`, `Kierunek`)
+- `Resources/` – organism icon files
+- `Zapis/` – save files
 
 ---
-
-## Uruchomienie
-Projekt uruchamiany z klasy `main()` w `Gra.java`.  
-Wymaga JDK 17+ oraz środowiska z obsługą Swing (np. IntelliJ IDEA).  
+Project for the *Object-Oriented Programming* course (2024/2025) at Gdańsk University of Technology.
