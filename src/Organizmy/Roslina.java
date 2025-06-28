@@ -30,20 +30,14 @@ public abstract class Roslina extends Organizm {
 
         Punkt moje = this.getPolozenie();
 
-        if (this instanceof Organizmy.Rosliny.Trawa) {
+        if (this instanceof Organizmy.Rosliny.Trawa || this instanceof Organizmy.Rosliny.Mlecz) {
             if (inny.getClass().getSimpleName().equals("Owca")) {
-                SwiatGlobalny.dodajLog("Trawa została zjedzona przez Owcę");
+                SwiatGlobalny.dodajLog(nazwa() + " została zjedzona przez Owcę");
                 SwiatGlobalny.usunOrganizm(this);
             } else {
-                SwiatGlobalny.dodajLog(inny.nazwa() + " stanęło na Trawie");
+                SwiatGlobalny.dodajLog(inny.nazwa() + " stanęło na " + nazwa());
                 inny.setPolozenie(moje);
             }
-            return;
-        }
-
-        if (this instanceof Organizmy.Rosliny.Mlecz) {
-            SwiatGlobalny.dodajLog(inny.nazwa() + " stanęło na Mleczu");
-            inny.setPolozenie(moje);
             return;
         }
 

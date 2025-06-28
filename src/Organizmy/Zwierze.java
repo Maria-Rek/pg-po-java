@@ -18,10 +18,16 @@ public abstract class Zwierze extends Organizm {
             Punkt nowaPozycja = sasiednie.get(new Random().nextInt(sasiednie.size()));
             Organizm cel = SwiatGlobalny.getOrganizmNa(nowaPozycja);
 
-            if (cel != null) {
-                kolizja(cel);
-            } else {
+            if (cel == null) {
                 setPolozenie(nowaPozycja);
+            } else if (cel instanceof Roslina && this.getClass().getSimpleName().equals("Owca")) {
+                setPolozenie(nowaPozycja);
+                cel.kolizja(this);
+            } else if (cel instanceof Roslina) {
+                setPolozenie(nowaPozycja);
+                SwiatGlobalny.dodajLog(this.nazwa() + " stanęło na " + cel.nazwa());
+            } else {
+                kolizja(cel);
             }
         }
 
@@ -32,7 +38,7 @@ public abstract class Zwierze extends Organizm {
     public void kolizja(Organizm inny) {
         if (inny == null) return;
 
-        if (inny instanceof Roslina) { //roslina obsługuje kolizje
+        if (inny instanceof Roslina) {
             inny.kolizja(this);
             return;
         }
