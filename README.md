@@ -1,53 +1,60 @@
-# Object-Oriented Programming (Java)
+# Virtual World (Java)
 
-## Project Overview
+GUI-based 2D world simulator where organisms live, move, fight, and reproduce according to individual behavior rules.
 
-GUI-based 2D world simulator where various organisms live, move, fight, and reproduce according to individual rules.
-
-The game is **turn-based**, with organisms acting based on initiative and age, displaying the board, event logs, and organism info in a graphical interface.  
-Game state can be saved/loaded from a text file.
+The game is turn-based. Organisms act based on initiative and age, with the board and event logs displayed in a Swing GUI.  
+Game state can be saved and loaded from a text file.
 
 ---
 
-## Features
+## Core Concepts
 
-- `ISwiat` interface and organism classes
-- Inheritance with `Animal` and `Plant` classes using polymorphism and encapsulation
-- 6 animals:
-  - Wolf
-  - Sheep
-  - Fox (avoids stronger organisms)
-  - Turtle (25% move chance, blocks weaker attacks)
-  - Antelope (range 2, 50% escape chance)
-  - CyberSheep (hunts Hogweed)
-- 5 plants:
-  - Grass
-  - Dandelion (3 spread attempts)
-  - Guarana (+3 strength)
-  - Deadly Nightshade (poisonous)
-  - Hogweed (kills surrounding organisms except CyberSheep)
-- **Human**:
-  - Controlled with ←↑↓→
-  - “Firestorm” ability:
-    - 5 turns active
-    - 5 turns cooldown
-    - Activated with spacebar
-- Collision handling and reproduction of same-species organisms
-- Turn priority based on initiative and age
-- 8-neighborhood movement and reproduction
-- Graphical representation using PNG icons (Swing GUI)
-- Save/load system using text files
+- `ISwiat` interface defining simulation behavior
+- Abstract organism hierarchy (`Animal`, `Plant`)
+- Polymorphism and encapsulation
+- Turn order determined by initiative and age
+- Collision handling and same-species reproduction
+- 8-neighborhood movement model
+- Swing-based GUI with PNG icon rendering
+- Text-based save/load system
 
 ---
 
-## Directory Structure
+## Organisms
 
-- `GUI/` – main window (`Gra.java`), board view (`Widok.java`)
-- `Swiat/` – interface, world logic, singleton
-- `Organizmy/` – organism classes with `Rosliny/` and `Zwierzeta/` subfolders
-- `Utils/` – helper classes (`Punkt`, `Kierunek`)
-- `Resources/` – organism icon files
+### Animals
+- Wolf
+- Sheep
+- Fox (avoids stronger organisms)
+- Turtle (25% move chance, blocks weaker attacks)
+- Antelope (extended movement, 50% escape chance)
+- CyberSheep (actively hunts Hogweed)
+
+### Plants
+- Grass
+- Dandelion (multiple spread attempts)
+- Guarana (increases strength)
+- Deadly Nightshade (poisonous)
+- Hogweed (damages surrounding organisms except CyberSheep)
+
+### Human
+- Controlled via arrow keys
+- Special ability: **Firestorm**
+  - 5 turns active
+  - 5 turns cooldown
+  - Activated with spacebar
+
+---
+
+## Project Structure
+
+- `GUI/` – main window and board rendering
+- `Swiat/` – world interface and simulation logic
+- `Organizmy/` – organism hierarchy (`Rosliny/`, `Zwierzeta/`)
+- `Utils/` – helper classes
+- `Resources/` – PNG icons
 - `Zapis/` – save files
 
 ---
+
 Project for the *Object-Oriented Programming* course (2024/2025) at Gdańsk University of Technology.
